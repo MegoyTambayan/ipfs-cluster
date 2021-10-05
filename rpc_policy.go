@@ -7,6 +7,7 @@ package ipfscluster
 // without missing any endpoint.
 var DefaultRPCPolicy = map[string]RPCEndpointType{
 	// Cluster methods
+	"Cluster.Alerts":               RPCClosed,
 	"Cluster.BlockAllocate":        RPCClosed,
 	"Cluster.ConnectGraph":         RPCClosed,
 	"Cluster.ID":                   RPCOpen,
@@ -14,6 +15,7 @@ var DefaultRPCPolicy = map[string]RPCEndpointType{
 	"Cluster.PeerAdd":              RPCOpen, // Used by Join()
 	"Cluster.PeerRemove":           RPCTrusted,
 	"Cluster.Peers":                RPCTrusted, // Used by ConnectGraph()
+	"Cluster.PeersWithFilter":      RPCClosed,
 	"Cluster.Pin":                  RPCClosed,
 	"Cluster.PinGet":               RPCClosed,
 	"Cluster.PinPath":              RPCClosed,
@@ -26,7 +28,6 @@ var DefaultRPCPolicy = map[string]RPCEndpointType{
 	"Cluster.RepoGCLocal":          RPCTrusted,
 	"Cluster.SendInformerMetric":   RPCClosed,
 	"Cluster.SendInformersMetrics": RPCClosed,
-	"Cluster.Alerts":               RPCClosed,
 	"Cluster.Status":               RPCClosed,
 	"Cluster.StatusAll":            RPCClosed,
 	"Cluster.StatusAllLocal":       RPCClosed,
