@@ -28,6 +28,7 @@ import (
 	"time"
 
 	types "github.com/ipfs/ipfs-cluster/api"
+	"github.com/ipfs/ipfs-cluster/state"
 
 	cid "github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -463,6 +464,11 @@ func (api *API) notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	api.SendResponse(w, http.StatusNotFound, errors.New("not found"), nil)
 }
 
+// Context returns the API context
+func (api *API) Context() context.Context {
+	return api.ctx
+}
+
 // ParsePinPathOrFail parses a pin path and returns it or makes the request
 // fail.
 func (api *API) ParsePinPathOrFail(w http.ResponseWriter, r *http.Request) *types.PinPath {
@@ -533,8 +539,12 @@ func (api *API) SendResponse(
 
 	// Send an error
 	if err != nil {
-		if status == SetStatusAutomatically || status < 400 { // set a default error status
-			status = http.StatusInternalServerError
+		if status == SetStatusAutomatically || status < 400 {
+			if err.Error() == state.ErrNotFound.Error() {
+				status = http.StatusNotFound
+			} else {
+				status = http.StatusInternalServerError
+			}
 		}
 		w.WriteHeader(status)
 
